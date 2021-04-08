@@ -8,12 +8,11 @@ using System.Windows.Forms;
 
 namespace QLKTX.Forms
 {
-    public partial class frm_DangNhap : Form
+    public partial class frm_QLGX : Form
     {
-        public frm_DangNhap()
+        public frm_QLGX()
         {
             InitializeComponent();
         }
-
     }
 }
