@@ -36,10 +36,10 @@ namespace QLKTX.Forms
             this.panel3 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cbbRoom = new System.Windows.Forms.ComboBox();
+            this.cbbBuilding = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tbKeyword = new System.Windows.Forms.TextBox();
             this.btnFilter = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -113,10 +113,10 @@ namespace QLKTX.Forms
             // 
             this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.label4);
-            this.panel3.Controls.Add(this.comboBox2);
-            this.panel3.Controls.Add(this.comboBox1);
+            this.panel3.Controls.Add(this.cbbRoom);
+            this.panel3.Controls.Add(this.cbbBuilding);
             this.panel3.Controls.Add(this.label3);
-            this.panel3.Controls.Add(this.textBox2);
+            this.panel3.Controls.Add(this.tbKeyword);
             this.panel3.Controls.Add(this.btnFilter);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(3, 3);
@@ -142,21 +142,21 @@ namespace QLKTX.Forms
             this.label4.TabIndex = 5;
             this.label4.Text = "Tòa nhà";
             // 
-            // comboBox2
+            // cbbRoom
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(423, 42);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(173, 28);
-            this.comboBox2.TabIndex = 4;
+            this.cbbRoom.FormattingEnabled = true;
+            this.cbbRoom.Location = new System.Drawing.Point(423, 42);
+            this.cbbRoom.Name = "cbbRoom";
+            this.cbbRoom.Size = new System.Drawing.Size(173, 28);
+            this.cbbRoom.TabIndex = 4;
             // 
-            // comboBox1
+            // cbbBuilding
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(194, 42);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(178, 28);
-            this.comboBox1.TabIndex = 3;
+            this.cbbBuilding.FormattingEnabled = true;
+            this.cbbBuilding.Location = new System.Drawing.Point(194, 42);
+            this.cbbBuilding.Name = "cbbBuilding";
+            this.cbbBuilding.Size = new System.Drawing.Size(178, 28);
+            this.cbbBuilding.TabIndex = 3;
             // 
             // label3
             // 
@@ -167,12 +167,12 @@ namespace QLKTX.Forms
             this.label3.TabIndex = 2;
             this.label3.Text = "Mã sinh viên hoặc tên";
             // 
-            // textBox2
+            // tbKeyword
             // 
-            this.textBox2.Location = new System.Drawing.Point(5, 43);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(164, 27);
-            this.textBox2.TabIndex = 1;
+            this.tbKeyword.Location = new System.Drawing.Point(5, 43);
+            this.tbKeyword.Name = "tbKeyword";
+            this.tbKeyword.Size = new System.Drawing.Size(164, 27);
+            this.tbKeyword.TabIndex = 1;
             // 
             // btnFilter
             // 
@@ -182,6 +182,7 @@ namespace QLKTX.Forms
             this.btnFilter.TabIndex = 0;
             this.btnFilter.Text = "Tìm kiếm";
             this.btnFilter.UseVisualStyleBackColor = true;
+            this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
             // 
             // tabPage2
             // 
@@ -215,6 +216,7 @@ namespace QLKTX.Forms
             this.dgvUser.RowTemplate.Height = 29;
             this.dgvUser.Size = new System.Drawing.Size(536, 411);
             this.dgvUser.TabIndex = 0;
+            this.dgvUser.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUser_CellClick);
             // 
             // panel1
             // 
@@ -286,6 +288,7 @@ namespace QLKTX.Forms
             this.btnDelStudent.TabIndex = 4;
             this.btnDelStudent.Text = "Xóa sinh viên";
             this.btnDelStudent.UseVisualStyleBackColor = true;
+            this.btnDelStudent.Click += new System.EventHandler(this.btnDelStudent_Click);
             // 
             // btnUpdateStudent
             // 
@@ -295,6 +298,7 @@ namespace QLKTX.Forms
             this.btnUpdateStudent.TabIndex = 3;
             this.btnUpdateStudent.Text = "Sửa thông tin sinh viên";
             this.btnUpdateStudent.UseVisualStyleBackColor = true;
+            this.btnUpdateStudent.Click += new System.EventHandler(this.btnUpdateStudent_Click);
             // 
             // btnAddNewStudent
             // 
@@ -304,6 +308,7 @@ namespace QLKTX.Forms
             this.btnAddNewStudent.TabIndex = 2;
             this.btnAddNewStudent.Text = "Thêm mới sinh viên";
             this.btnAddNewStudent.UseVisualStyleBackColor = true;
+            this.btnAddNewStudent.Click += new System.EventHandler(this.btnAddNewStudent_Click);
             // 
             // tbKeyword1
             // 
@@ -358,10 +363,10 @@ namespace QLKTX.Forms
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cbbRoom;
+        private System.Windows.Forms.ComboBox cbbBuilding;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox tbKeyword;
         private System.Windows.Forms.Button btnFilter;
     }
 }

@@ -18,9 +18,15 @@ namespace QLKTX.Models
         public int UserId { get; set; }
         [Column(TypeName = "nvarchar")]
         [StringLength(255)]
-        public string Reason { get; set; }
+        public string Name { get; set; }
+        [Column(TypeName = "nvarchar")]
+        [StringLength(255)]
+        public string? Phone { get; set; }
+        [Column(TypeName = "nvarchar")]
+        [StringLength(255)]
+        public string? Reason { get; set; }
         public DateTime DateStart { get; set; }
-        public DateTime DateEnd { get; set; }
+        public DateTime? DateEnd { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

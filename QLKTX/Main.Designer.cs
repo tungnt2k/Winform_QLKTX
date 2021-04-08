@@ -129,7 +129,7 @@ namespace QLKTX
             this.Controls.Add(this.panelBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Main";
-            this.Text = "Form1";
+            this.Text = "Quản lý kí túc xá";
             this.Load += new System.EventHandler(this.Main_Load);
             this.panelBtn.ResumeLayout(false);
             this.ResumeLayout(false);

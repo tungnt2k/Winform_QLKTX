@@ -22,7 +22,8 @@ namespace QLKTX
 
         private void Main_Load(object sender, EventArgs e)
         {
-
+            frm_QLSV frmQlsv = new frm_QLSV();
+            OpenChildForm(frmQlsv);
         }
 
         private void OpenChildForm(Form childForm)

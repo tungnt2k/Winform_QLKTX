@@ -23,6 +23,7 @@ namespace QLKTX.Models
         public string Phone { get; set; }
         [Column(TypeName = "nvarchar")]
         [StringLength(50)]
+        [Index(IsUnique = true)]
         public string StudentCode { get; set; }
         [Column(TypeName = "nvarchar")]
         [StringLength(20)]

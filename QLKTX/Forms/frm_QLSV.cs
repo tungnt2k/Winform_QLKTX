@@ -21,6 +21,8 @@ namespace QLKTX.Forms
         private List<Building> buildings;
         private List<Room> rooms;
 
+        private int? currentStudentId;
+
         private void frm_QLSV_Load(object sender, EventArgs e)
         {
             LoadBuilding();
@@ -45,6 +47,19 @@ namespace QLKTX.Forms
                 buildings.ForEach(e =>
                 {
                     cbbBuilding1.Items.Add(new { Text = e.Name, Value = e.Id });
+                });
+            }
+
+            cbbBuilding.DisplayMember = "Text";
+            cbbBuilding.ValueMember = "Value";
+            cbbBuilding.Items.Clear();
+            if (buildings != null)
+            {
+                cbbBuilding.Items.Add(new { Text = "Chọn toà nhà", Value = 0 });
+                cbbBuilding.SelectedIndex = cbbBuilding.FindString("Chọn toà nhà");
+                buildings.ForEach(e =>
+                {
+                    cbbBuilding.Items.Add(new { Text = e.Name, Value = e.Id });
                 });
             }
 
@@ -78,6 +93,19 @@ namespace QLKTX.Forms
                 });
             }
 
+            cbbRoom.DisplayMember = "Text";
+            cbbRoom.ValueMember = "Value";
+            cbbRoom.Items.Clear();
+            if (rooms != null)
+            {
+                cbbRoom.Items.Add(new { Text = "Chọn phòng", Value = 0 });
+                cbbRoom.SelectedIndex = cbbRoom.FindString("Chọn phòng");
+                rooms.ForEach(e =>
+                {
+                    cbbRoom.Items.Add(new { Text = e.Name, Value = e.Id });
+                });
+            }
+
         }
 
         private void LoadUser(int buildingId = 0, int roomId = 0, string keyword = "")
@@ -88,7 +116,10 @@ namespace QLKTX.Forms
                     from ur in dbContext.UserRooms.Where(ur => ur.UserId == u.Id).DefaultIfEmpty()
                     from r in dbContext.Rooms.Where(r => r.Id == ur.RoomId).DefaultIfEmpty()
                     from b in dbContext.Buildings.Where(b => b.Id == r.BuildingId).DefaultIfEmpty()
-                    select new
+                    where buildingId != 0 ? b.Id == buildingId : b.Id != 0
+                    where roomId != 0 ? r.Id == roomId: r.Id != 0
+                    where keyword != "" ? u.Name.Contains(keyword) || u.StudentCode.Contains(keyword) : u.Id != 0
+                            select new
                     {
                         userId = u.Id,
                         userName = u.Name,
@@ -96,26 +127,12 @@ namespace QLKTX.Forms
                         userPhone = u.Phone,
                         userAddress = u.Address,
                         userCode = u.StudentCode,
-                        roomId = r.Id,
-                        roomName = r.Name,
-                        bId = b.Id,
-                        bName = b.Name,
+                        roomId = r != null ? r.Id : 0,
+                        roomName = r != null ? r.Name : "",
+                        bId = b != null ? b.Id : 0,
+                        bName = b != null ? b.Name : "",
                     };
 
-                if (buildingId != 0)
-                {
-                    query.Where(i => i.bId == buildingId);
-                }
-
-                if (roomId != 0)
-                {
-                    query.Where(i => i.roomId == roomId);
-                }
-
-                if (keyword != "")
-                {
-                    query.Where(i => i.userName.Contains(keyword) || i.userCode.Contains(keyword));
-                }
 
                 var res = query.ToList();
                 dgvUser2.DataSource = res;
@@ -153,10 +170,56 @@ namespace QLKTX.Forms
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            int buildingId = int.Parse((cbbBuilding1.SelectedItem as dynamic).Value);
-            int roomId = int.Parse((cbbRoom1.SelectedItem as dynamic).Value);
+            int buildingId = (cbbBuilding1.SelectedItem as dynamic).Value;
+            int roomId = (cbbRoom1.SelectedItem as dynamic).Value;
             string keyword = tbKeyword1.Text;
             LoadUser(buildingId, roomId, keyword);
+        }
+
+        private void btnAddNewStudent_Click(object sender, EventArgs e)
+        {
+            frm_AddUser frmAddUser = new frm_AddUser();
+            frmAddUser.ShowDialog();
+            LoadUser();
+        }
+
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            int buildingId = (cbbBuilding.SelectedItem as dynamic).Value;
+            int roomId = (cbbRoom.SelectedItem as dynamic).Value;
+            string keyword = tbKeyword.Text;
+            LoadUser(buildingId, roomId, keyword);
+        }
+
+        private void btnDelStudent_Click(object sender, EventArgs e)
+        {
+            using (var dbContext = new AppContext())
+            {
+                User u = dbContext.Users.Find(currentStudentId);
+                if (u != null)
+                {
+                    dbContext.Users.Remove(u);
+                    dbContext.SaveChanges();
+                }
+            }
+            LoadUser();
+            currentStudentId = null;
+        }
+
+        private void dgvUser_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int studentId;
+            if (int.TryParse(dgvUser2.Rows[e.RowIndex].Cells["userId"].Value.ToString(), out studentId))
+            {
+            }
+            currentStudentId = studentId;
+        }
+
+        private void btnUpdateStudent_Click(object sender, EventArgs e)
+        {
+            frm_UpdateUser frm = new frm_UpdateUser(currentStudentId);
+            frm.ShowDialog();
+            LoadUser();
         }
     }
 }
