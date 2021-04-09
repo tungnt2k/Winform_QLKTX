@@ -19,6 +19,7 @@ namespace QLKTX.Models
         [Column(TypeName = "nvarchar")]
         [StringLength(255)]
         public string Note { get; set; }
+        public float Price { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
         public DateTime CreatedAt { get; set; }

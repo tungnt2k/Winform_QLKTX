@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity.Migrations;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,13 @@ using QLKTX.Models;
 
 namespace QLKTX.Forms
 {
+    public class SumaryService
+    {
+        public string Name { get; set; }
+        public double sumPrice { get; set; }
+
+        public int countTurn { get; set; }
+    }
     public partial class frm_QLDV : Form
     {
         public frm_QLDV()
@@ -131,15 +139,19 @@ namespace QLKTX.Forms
         {
 
             User user;
+            Service service;
+            int serviceId = (cbbService.SelectedItem as dynamic).Value;
             using (var dbContext = new AppContext())
             {
                 user = dbContext.Users.FirstOrDefault(u => u.StudentCode == tbStudentCode.Text);
+                service = dbContext.Services.FirstOrDefault(s => s.Id == serviceId);
             }
 
             if (user != null)
             {
                 UserUseService uus = new UserUseService();
-                uus.ServiceId = (cbbService.SelectedItem as dynamic).Value;
+                uus.ServiceId = serviceId;
+                uus.Price = service.Price;
                 uus.UserId = user.Id;
                 uus.Note = rtbNote.Text;
                 uus.DateStart = dtpFromDate.Value;
@@ -167,6 +179,37 @@ namespace QLKTX.Forms
 
             }
 
+        }
+
+        private void btnShow_Click(object sender, EventArgs e)
+        {
+            DateTime startDate = dtpStartDate.Value;
+            DateTime endDate = dtpEndDate.Value;
+            
+            using (var dbContext = new AppContext())
+            {
+
+                User user = dbContext.Users.FirstOrDefault(u => u.StudentCode == tbStudentCode3.Text);
+                if (user != null)
+                {
+                    var res = dbContext.Database.SqlQuery<SumaryService>(
+                        "SELECT s3.Name, s.sumPrice, s1.countTurn FROM Services s3 JOIN ( SELECT uus.ServiceId as serviceId , sum(uus.Price) as sumPrice FROM UserUseServices uus Where uus.UserId = @userId and uus.DateStart >= @startDate and uus.DateEnd <= @endDate GROUP BY uus.ServiceId ) s ON (s3.id = s.serviceId) JOIN ( SELECT uus1.ServiceId as serviceId , COUNT(*) as countTurn FROM UserUseServices uus1 GROUP BY uus1.ServiceId ) s1 ON (s3.id = s1.serviceId)",
+                        new SqlParameter("@userId", user.Id), new SqlParameter("@startDate", SqlDbType.DateTime) { Value = startDate},
+                        new SqlParameter("@endDate", SqlDbType.DateTime) { Value = endDate}).ToList();
+                    dgvSumarySvc.DataSource = res;
+
+                    dgvSumarySvc.DataSource = services;
+                    dgvSumarySvc.Columns[0].HeaderText = "Tên dịch vụ";
+                    dgvSumarySvc.Columns[1].HeaderText = "Tổng số tiền";
+                    dgvSumarySvc.Columns[2].HeaderText = "Số lần sử dụng";
+                }
+                else
+                {
+                    MessageBox.Show("Mã sinh viên không được tìm thấy", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
+                }
+
+            }
         }
     }
 }
